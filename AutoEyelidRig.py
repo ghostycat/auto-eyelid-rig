@@ -113,12 +113,26 @@ def upLidVtxSet (self):
 	self.upperLidVtx = cmds.filterExpand(sm = 31)
 	
 	if self.upperLidVtx == None :
-		cmds.scrollField(self.scrollfUpLid, e = 1, cl = 1)
-		cmds.error("Please select vertices of the upper lid.")
+		cmds.scrollField(self.scrollfUpLid, e = 1, clear = 1)
+		cmds.warning("Please select vertices of the upper lid.")
 	else :
-		cmds.scrollField(self.scrollfUpLid, e = 1, cl = 1)
+		cmds.scrollField(self.scrollfUpLid, e = 1, clear = 1)
 		for vtx in self.upperLidVtx :
 			vtxNum = vtx.rpartition(".")[2] # <type 'unicode'>
-			cmds.scrollField (self.scrollfUpLid, e = 1, it =(str (vtxNum) + " "))
+			cmds.scrollField(self.scrollfUpLid, e = 1, it =(str (vtxNum) + " "))
+
+# List lowLid vertices
+def upLidVtxSet (self):
+	
+	self.lowerLidVtx = cmds.filterExpand(sm = 31)
+	
+	if self.lowerLidVtx == None :
+		cmds.scrollField(self.scrollfLowLid, e = 1, clear = 1)
+		cmds.warning("Please select vertices of the upper lid.")
+	else :
+		cmds.scrollField(self.scrollfLowLid, e = 1, clear = 1)
+		for vtx in self.lowerLidVtx :
+			vtxNum = vtx.rpartition(".")[2] # <type 'unicode'>
+			cmds.scrollField(self.scrollfLowLid, e = 1, it =(str (vtxNum) + " "))
 
 UI(UI)
