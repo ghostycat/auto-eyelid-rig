@@ -1,3 +1,5 @@
+import maya.cmds as cmds
+
 def UI(self):
 
     winWidth = 400
@@ -73,3 +75,50 @@ def UI(self):
     cmds.text(height = 5, label = "")
     
     cmds.showWindow("auto_eyelid_rig")
+
+
+# Place locator to the eyeball center
+def placeEyeCenter(self):
+	selection = cmds.filterExpand(selectionMask = 12)
+	self.eyeName = cmds.textField(self.txtfEye, query = 1, text = 1)
+	
+	if selection == None:
+		self.eyeLoc = None
+		self.eyeName = None
+		cmds.warning("Please select the eyeball.")
+	else :
+		eyeball = selection[0]
+		if not self.eyeName:
+			self.eyeName = name = "DefaultEye"
+		else :
+			name = self.eyeName
+		
+		self.eyeLoc = cmds.spaceLocator(n = "{0}_eyeCenter_locator".format(name))[0]
+		cmds.matchTransform(self.eyeLoc, selection)
+		
+		# Place locator above for aimUp
+		self.eyeUpLoc = cmds.spaceLocator(n = "{0}_eyeUp_locator".format(name))[0]
+		cmds.matchTransform(self.eyeUpLoc, selection)
+		cmds.move(0, 10, 0, self.eyeUpLoc, relative = True)
+
+		cmds.select(clear = 1)
+
+		# Update UI
+		cmds.button(self.btnPlaceCenter, e = True, enable = False)
+		cmds.textField(self.txtfLoc, e = True, text=self.eyeLoc)
+
+# List upLid vertices
+def upLidVtxSet (self):
+	
+	self.upperLidVtx = cmds.filterExpand(sm = 31)
+	
+	if self.upperLidVtx == None :
+		cmds.scrollField(self.scrollfUpLid, e = 1, cl = 1)
+		cmds.error("Please select vertices of the upper lid.")
+	else :
+		cmds.scrollField(self.scrollfUpLid, e = 1, cl = 1)
+		for vtx in self.upperLidVtx :
+			vtxNum = vtx.rpartition(".")[2] # <type 'unicode'>
+			cmds.scrollField (self.scrollfUpLid, e = 1, it =(str (vtxNum) + " "))
+
+UI(UI)

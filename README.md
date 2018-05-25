@@ -1,1 +1,1 @@
-# auto-eyelid-rig-ui
+# auto-eyelid-rig
